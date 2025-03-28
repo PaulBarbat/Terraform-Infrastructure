@@ -2,24 +2,19 @@ provider "aws" {
   region = "eu-central-1"  # Frankfurt
 }
 
+# This resource is only needed if you haven't imported the security group yet.
+# If you have already imported, you do not need this resource.
+# This is for illustration purposes.
 resource "aws_security_group" "jenkins_sg" {
+  # No `id` field here. Instead, after the import, Terraform will recognize this existing resource.
   name        = "jenkins-security-group"
-  description = "Allow SSH and HTTP access for Jenkins"
+  description = "Security group for Jenkins EC2 instances"
+  vpc_id      = "vpc-0144ffccd0fe563c0"  # Your VPC ID (ensure it's correct)
 
-  lifecycle {
-    prevent_destroy = true
-  }
-
+  # Example inbound and outbound rules (adjust according to your requirements)
   ingress {
     from_port   = 22
     to_port     = 22
-    protocol    = "tcp"
-    cidr_blocks = ["192.168.1.137/32"]
-  }
-
-  ingress {
-    from_port   = 8080
-    to_port     = 8080
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
@@ -31,8 +26,6 @@ resource "aws_security_group" "jenkins_sg" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 }
-
-
 
 # Data source to reference the existing IAM role
 data "aws_iam_role" "jenkins_role" {
@@ -69,7 +62,7 @@ resource "aws_instance" "jenkins_master" {
   ami                   = "ami-04a5bacc58328233d"  # Ubuntu AMI for your region
   instance_type         = "t3.micro"
   key_name              = "Terraform key"           # Replace with your actual key pair name
-  security_groups       = [aws_security_group.jenkins_sg.name]
+  security_groups       = [aws_security_group.jenkins_sg.name]  # Attach the imported security group
   iam_instance_profile  = aws_iam_instance_profile.jenkins_profile.name  # Attach the IAM instance profile
 
   user_data = base64encode(file("install-jenkins.sh"))
