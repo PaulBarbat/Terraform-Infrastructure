@@ -1,9 +1,12 @@
 #!/bin/bash
-sudo apt update -y
-sudo apt install -y openjdk-11-jdk
-wget -q -O - https://pkg.jenkins.io/debian/jenkins.io.key | sudo apt-key add -
-sudo sh -c 'echo deb http://pkg.jenkins.io/debian-stable binary/ > /etc/apt/sources.list.d/jenkins.list'
-sudo apt update -y
-sudo apt install -y jenkins
-sudo systemctl start jenkins
-sudo systemctl enable jenkins
+apt update -y
+apt install -y openjdk-17-jdk
+
+# Mount the specific EBS volume
+mkdir -p /mnt/jenkins_home
+mount /dev/xvdf /mnt/jenkins_home
+echo "/dev/xvdf /mnt/jenkins_home ext4 defaults,nofail 0 2" >> /etc/fstab
+
+# Set Jenkins Home
+export JENKINS_HOME=/mnt/jenkins_home
+systemctl restart jenkins
