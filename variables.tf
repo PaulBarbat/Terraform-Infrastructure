@@ -23,3 +23,8 @@ variable "key_name" {
   description = "The EC2 key pair name"
   type        = string
 }
+
+variable "elastic_ip_allocation_id" {
+  description = "The Elastic IP address for the Jenkins Master instance"
+  type        = string
+}
