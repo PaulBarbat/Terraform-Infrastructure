@@ -118,7 +118,20 @@ Jenkins with debugging:
 sudo systemctl stop jenkins
 sudo jenkins --httpListenAddress=0.0.0.0 --httpPort=8080
 
+Debugging jenkins if the EBS module dismounts
+sudo systemctl status jenkins
+  100  sudo systemctl start jenkins
+  101  journalctl -xe
+  102  lsblk
+  103  cat /etc/fstab
+  104  sudo nano /etc/fstab
+  -Comment the module which is not found in the lsblk list
+  105  sudo mount -a
+  106  sudo systemctl start jenkins
+  108  sudo systemctl status jenkins
+
 sudo cat /var/lib/jenkins/secrets/initialAdminPassword
 
 ssh-keygen -R 63.176.232.211
-ssh -i .\Terraform_key.pem ubuntu@63.176.232.211
+ssh -i .\Terraform_key.pem ubuntu@63.176.232.211  #master
+ssh -i .\Terraform_key.pem ubuntu@3.79.243.34   #agent

@@ -10,7 +10,7 @@ cd /home/ubuntu/jenkins-agent
 # Fetch Jenkins agent secret dynamically
 JENKINS_MASTER="http://63.176.232.211/:8080"
 JENKINS_NODE_NAME="$(curl -s http://169.254.169.254/latest/meta-data/instance-id)"
-SECRET=$(curl -s -u "admin:<JENKINS_API_TOKEN>" "$JENKINS_MASTER/computer/$JENKINS_NODE_NAME/slave-agent.jnlp" | grep -oP '(?<=<secret>).*?(?=</secret>)')
+SECRET=$(curl -s -u "admin:11ceadb4c23b90025ef84b07b4e91bb8a2" "$JENKINS_MASTER/computer/$JENKINS_NODE_NAME/slave-agent.jnlp" | grep -oP '(?<=<secret>).*?(?=</secret>)')
 
 # Download Jenkins agent jar file
 wget $JENKINS_MASTER/jnlpJars/agent.jar

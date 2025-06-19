@@ -40,3 +40,5 @@ terraform.rc
 *.key
 *.hcl
 *.pem
+*.pub
+ubuntu*
