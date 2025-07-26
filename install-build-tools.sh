@@ -1,7 +1,7 @@
 #!/bin/bash
 # Update system and install required tools
 sudo apt update -y
-sudo apt install -y openjdk-11-jdk cmake ninja-build git awscli libsdl2-dev libsdl2-image-dev libsdl2-ttf-dev g++-mingw-w64
+sudo apt install -y openjdk-11-jdk cmake ninja-build git awscli libsdl2-dev libsdl2-image-dev libsdl2-ttf-dev g++-mingw-w64 pkg-config
 
 # Configure Jenkins agent directory
 mkdir -p /home/ubuntu/jenkins-agent
