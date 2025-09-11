@@ -1,12 +1,14 @@
 # jenkins_master.tf
+# Creates an EC2 Instance for the Jenkins Master
 resource "aws_instance" "jenkins_master" {
+  #Uses a pre-existing AMI configured manually
   ami                   = "ami-0ae607bdbb9253cad"  # Ubuntu AMI for your region
-  instance_type         = var.instance_type
+  instance_type         = var.instance_type  #Uses configured instance type
   key_name              = var.key_name           # Replace with your actual key pair name
   security_groups       = [aws_security_group.jenkins_sg.name]  # Reference security group from security_group.tf
   iam_instance_profile  = data.aws_iam_instance_profile.jenkins_profile_existing.name  # Reference IAM instance profile from instance_profile.tf
 
-  user_data = base64encode(file("install-jenkins.sh"))
+  user_data = base64encode(file("install-jenkins.sh")) #user data script 
 
   tags = {
     Name = "Jenkins-Master"
@@ -25,3 +27,8 @@ resource "aws_eip_association" "jenkins_master_eip_association" {
   instance_id   = aws_instance.jenkins_master.id
   allocation_id = var.elastic_ip_allocation_id  # Use the allocation ID of the manually created EIP
 }
+#TODO
+  #Try and build a custom AMI with Packer
+  #Use vpc_security_group_ids = [aws_security_group.jenkins_sg.id] for security security_groups
+  #Create EBS using terraform
+  #Manage EIP via Terraform or create an ALB with an ACM certificate and use DNS 

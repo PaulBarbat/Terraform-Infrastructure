@@ -8,6 +8,8 @@ resource "aws_security_group" "jenkins_sg" {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
+# Network CIDR blocks that are allowed/denied by this rule.
+# TODO: Avoid 0.0.0.0/0 for sensitive ports like SSH (22). Restrict to known IPs or use bastion/ALB.
     cidr_blocks = ["0.0.0.0/0"]  # Adjust for SSH access
   }
 
@@ -39,3 +41,10 @@ resource "aws_security_group" "jenkins_sg" {
     cidr_blocks = ["0.0.0.0/0"]  # Allow all outbound traffic
   }
 }
+
+#TODO
+  #Manage rules more strictly
+  #Use SSM and remove SSH from security groups 
+  #Do not expose 50000
+  #Put master and agent in same VPC/Private subnet
+  #Use aws_security_group_rule resource to add and remove rules 

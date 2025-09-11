@@ -29,3 +29,10 @@ chmod -R 775 $MOUNT_POINT
 
 # Restart Jenkins to apply the correct JENKINS_HOME
 systemctl restart jenkins
+
+#TODO
+    #Make EBS mount idempotent and detect if the device is formatted, if not, mkfs.ext4
+    #Use set -euo pipefail and log actions
+    #Use terraform to create and attach EBS
+    #Only append mount entry if not already there
+    

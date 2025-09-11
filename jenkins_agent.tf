@@ -1,10 +1,12 @@
 # Jenkins Agent Launch Template
 resource "aws_launch_template" "jenkins_agent_template" {
-  name_prefix   = "jenkins-agent"
-  image_id      = "ami-01f9b4e7cd3e0bbed"
-  instance_type = var.instance_type
-  key_name      = var.key_name
+  name_prefix   = "jenkins-agent"           #TODO trailing dash in name prefix
+  image_id      = "ami-01f9b4e7cd3e0bbed"   #TODO use data "aws_ami" lookup (owner + filter) to adjust for regional differences
+  instance_type = var.instance_type         #TODO validate
+  key_name      = var.key_name              #TODO Validate
 
+# Cloud-init or user-data script to run on instance boot for provisioning.
+# TODO: Consider baking AMIs with Packer or using configuration management (Ansible) for production instead of long user-data scripts.
   user_data = base64encode(file("install-build-tools.sh"))
 
   iam_instance_profile {
@@ -19,6 +21,8 @@ resource "aws_launch_template" "jenkins_agent_template" {
   block_device_mappings {
     device_name = "/dev/sda1"
 
+# References an EBS volume for persistent storage.
+# TODO: Ensure the EBS volume lifecycle and availability across AZs match instance placement; consider creating the EBS volume in Terraform rather than referencing an external one.
     ebs {
       volume_size           = 20  # Increase this value as needed
       volume_type           = "gp3"
@@ -58,3 +62,27 @@ resource "aws_autoscaling_group" "jenkins_agent_asg" {
     propagate_at_launch = true
   }
 }
+
+#TODO: Remove public IPs for agents, place them in private subnets with NAT
+#TODO: Restrict security group rules to master↔agent only, remove wide-open ingress
+# References an EBS volume for persistent storage.
+# TODO: Ensure the EBS volume lifecycle and availability across AZs match instance placement; consider creating the EBS volume in Terraform rather than referencing an external one.
+#TODO: Enable EBS encryption and optionally use a KMS key
+#TODO: Stop using SSH key pairs, switch to SSM Session Manager
+#TODO: Manage IAM instance profile in Terraform and apply least privilege
+#TODO: Remove secrets from install-build-tools.sh, fetch from SSM/Secrets Manager
+#TODO: Rotate any credentials that may have been committed to repo
+#TODO: Replace hard-coded AMI ID with data "aws_ami" filter (latest Ubuntu/Amazon Linux)
+#TODO: Replace hard-coded subnet ID with var.private_subnet_ids across multiple AZs
+#TODO: Replace hard-coded ASG sizes with variables (min, max, desired)
+#TODO: Decide scaling model: Jenkins-managed vs AWS AutoScaling policies
+#TODO: If AWS scaling, add target-tracking policy (CPU or queue length)
+#TODO: Add lifecycle block create_before_destroy = true for safer updates
+#TODO: Tag EBS volumes in addition to instances
+#TODO: Tune gp3 volume size/IOPS/throughput for build performance
+#TODO: Add common_tags (Env, Owner, CostCenter) to all resources
+#TODO: Consider Spot Instances for build agents to save cost
+#TODO: Bake AMIs with Packer for faster agent spin-up
+#TODO: Add CloudWatch metrics/alarms for ASG health and agent failures
+#TODO: Secure Terraform state with S3 backend + DynamoDB locking
+#TODO: Add terraform fmt/validate/tflint/tfsec checks to CI/CD pipeline

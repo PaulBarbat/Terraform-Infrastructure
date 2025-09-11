@@ -20,3 +20,11 @@ java -jar agent.jar -jnlpUrl $JENKINS_MASTER/computer/$JENKINS_NODE_NAME/slave-a
 
 # Keep the agent alive
 while true; do sleep 1000; done
+
+#TODO 
+    #Remove secrets
+    #Use AWS SSM Parameter store or Secrets Manager to provide secrets at runtime
+    #Use systemd to run the agent as a managed service
+    #Use more secure IAM roles
+    #Use private networks
+    #Idempotence & safety: add set -euo pipefail, check whether agent.jar already downloaded, and use retries/backoff for network calls.
