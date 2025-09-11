@@ -1,4 +1,3 @@
-# instance_profile.tf
 
 # Data source to reference the existing IAM role
 data "aws_iam_role" "jenkins_role" {
