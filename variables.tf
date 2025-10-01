@@ -42,6 +42,12 @@ variable "region" {
   default     = "eu-central-1" # preserve current behavior
 }
 
+variable "allowed_ssh_cidrs" {
+  description = "List of CIDRs allowed to SSH to Jenkins. Override in terraform.tfvars for production."
+  type        = list(string)
+  default     = ["0.0.0.0/0"]
+}
+
 #TODO Variable validation
 #TODO Make variables optional where we can 
 #TODO Group by purpose

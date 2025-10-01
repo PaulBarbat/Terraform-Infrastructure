@@ -4,13 +4,11 @@ resource "aws_security_group" "jenkins_sg" {
   description = "Security group for Jenkins EC2 instances"
   vpc_id      = var.vpc_id # Reference to the VPC ID variable
 
-  ingress {
-    from_port = 22
-    to_port   = 22
-    protocol  = "tcp"
-    # Network CIDR blocks that are allowed/denied by this rule.
-    # TODO: Avoid 0.0.0.0/0 for sensitive ports like SSH (22). Restrict to known IPs or use bastion/ALB.
-    cidr_blocks = ["0.0.0.0/0"] # Adjust for SSH access
+    ingress {
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = var.allowed_ssh_cidrs
   }
 
   ingress {
