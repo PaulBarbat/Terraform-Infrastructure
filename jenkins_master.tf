@@ -5,7 +5,7 @@ resource "aws_instance" "jenkins_master" {
   ami                  = "ami-0ae607bdbb9253cad"                                     # Ubuntu AMI for your region
   instance_type        = var.instance_type                                           #Uses configured instance type
   key_name             = var.key_name                                                # Replace with your actual key pair name
-  security_groups      = [aws_security_group.jenkins_sg.name]                        # Reference security group from security_group.tf
+  vpc_security_group_ids = [aws_security_group.jenkins_sg.id]                      # Reference security group from security_group.tf
   iam_instance_profile = data.aws_iam_instance_profile.jenkins_profile_existing.name # Reference IAM instance profile from instance_profile.tf
 
   user_data = base64encode(file("install-jenkins.sh")) #user data script 
