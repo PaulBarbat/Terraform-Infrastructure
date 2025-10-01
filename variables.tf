@@ -36,6 +36,12 @@ variable "elastic_ip_allocation_id" {
   type        = string
 }
 
+variable "region" {
+  description = "AWS region"
+  type        = string
+  default     = "eu-central-1" # preserve current behavior
+}
+
 #TODO Variable validation
 #TODO Make variables optional where we can 
 #TODO Group by purpose

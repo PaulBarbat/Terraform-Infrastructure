@@ -5,7 +5,7 @@
 # TODO enforce tags
 # TODO test out profiles
 # Declares which provider (cloud) Terraform will use for this configuration.
+# provider.tf
 provider "aws" {
-# Sets the AWS region where resources will be created.
-  region = "eu-central-1"  # Frankfurt
+  region = var.region
 }
