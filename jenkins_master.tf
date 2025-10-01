@@ -24,8 +24,10 @@ resource "aws_volume_attachment" "jenkins_master_attachment" {
 
 # Manually created Elastic IP (you provide this manually through the variable)
 resource "aws_eip_association" "jenkins_master_eip_association" {
+  count = length(trimspace(var.elastic_ip_allocation_id)) > 0 ? 1 : 0
+
   instance_id   = aws_instance.jenkins_master.id
-  allocation_id = var.elastic_ip_allocation_id # Use the allocation ID of the manually created EIP
+  allocation_id = var.elastic_ip_allocation_id
 }
 #TODO
 #Try and build a custom AMI with Packer

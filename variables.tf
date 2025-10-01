@@ -32,8 +32,9 @@ variable "key_name" {
 
 #An Elastic IP allocation ID to assign a static IP to Jenkins Master
 variable "elastic_ip_allocation_id" {
-  description = "The Elastic IP address for the Jenkins Master instance"
+  description = "The Elastic IP allocation ID to attach to the Jenkins Master (leave empty to skip)"
   type        = string
+  default     = ""
 }
 
 variable "region" {
