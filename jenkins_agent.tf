@@ -1,7 +1,7 @@
 # Jenkins Agent Launch Template
 resource "aws_launch_template" "jenkins_agent_template" {
   name_prefix   = "jenkins-agent"         #TODO trailing dash in name prefix
-  image_id      = "ami-01f9b4e7cd3e0bbed" #TODO use data "aws_ami" lookup (owner + filter) to adjust for regional differences
+  image_id      = var.agent_ami #TODO use data "aws_ami" lookup (owner + filter) to adjust for regional differences
   instance_type = var.instance_type       #TODO validate
   key_name      = var.key_name            #TODO Validate
 

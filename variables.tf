@@ -48,6 +48,18 @@ variable "allowed_ssh_cidrs" {
   default     = ["0.0.0.0/0"]
 }
 
+variable "master_ami" {
+  description = "AMI for Jenkins master (default = current AMI)"
+  type        = string
+  default     = "ami-0ae607bdbb9253cad"
+}
+
+variable "agent_ami" {
+  description = "AMI for Jenkins agents (default = current AMI)"
+  type        = string
+  default     = "ami-01f9b4e7cd3e0bbed"
+}
+
 #TODO Variable validation
 #TODO Make variables optional where we can 
 #TODO Group by purpose

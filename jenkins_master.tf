@@ -2,7 +2,7 @@
 # Creates an EC2 Instance for the Jenkins Master
 resource "aws_instance" "jenkins_master" {
   #Uses a pre-existing AMI configured manually
-  ami                  = "ami-0ae607bdbb9253cad"                                     # Ubuntu AMI for your region
+  ami                  = var.master_ami                                     # Ubuntu AMI for your region
   instance_type        = var.instance_type                                           #Uses configured instance type
   key_name             = var.key_name                                                # Replace with your actual key pair name
   vpc_security_group_ids = [aws_security_group.jenkins_sg.id]                      # Reference security group from security_group.tf
