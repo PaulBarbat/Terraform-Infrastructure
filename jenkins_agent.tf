@@ -1,12 +1,12 @@
 # Jenkins Agent Launch Template
 resource "aws_launch_template" "jenkins_agent_template" {
-  name_prefix   = "jenkins-agent"           #TODO trailing dash in name prefix
-  image_id      = "ami-01f9b4e7cd3e0bbed"   #TODO use data "aws_ami" lookup (owner + filter) to adjust for regional differences
-  instance_type = var.instance_type         #TODO validate
-  key_name      = var.key_name              #TODO Validate
+  name_prefix   = "jenkins-agent"         #TODO trailing dash in name prefix
+  image_id      = var.agent_ami #TODO use data "aws_ami" lookup (owner + filter) to adjust for regional differences
+  instance_type = var.instance_type       #TODO validate
+  key_name      = var.key_name            #TODO Validate
 
-# Cloud-init or user-data script to run on instance boot for provisioning.
-# TODO: Consider baking AMIs with Packer or using configuration management (Ansible) for production instead of long user-data scripts.
+  # Cloud-init or user-data script to run on instance boot for provisioning.
+  # TODO: Consider baking AMIs with Packer or using configuration management (Ansible) for production instead of long user-data scripts.
   user_data = base64encode(file("install-build-tools.sh"))
 
   iam_instance_profile {
@@ -21,10 +21,10 @@ resource "aws_launch_template" "jenkins_agent_template" {
   block_device_mappings {
     device_name = "/dev/sda1"
 
-# References an EBS volume for persistent storage.
-# TODO: Ensure the EBS volume lifecycle and availability across AZs match instance placement; consider creating the EBS volume in Terraform rather than referencing an external one.
+    # References an EBS volume for persistent storage.
+    # TODO: Ensure the EBS volume lifecycle and availability across AZs match instance placement; consider creating the EBS volume in Terraform rather than referencing an external one.
     ebs {
-      volume_size           = 20  # Increase this value as needed
+      volume_size           = 20 # Increase this value as needed
       volume_type           = "gp3"
       delete_on_termination = true
     }
@@ -41,12 +41,12 @@ resource "aws_launch_template" "jenkins_agent_template" {
 
 # Jenkins Agent Auto Scaling Group
 resource "aws_autoscaling_group" "jenkins_agent_asg" {
-  name              = "jenkins-agent-asg"
-  min_size         = 0  # No agents running when idle
-  max_size         = 1  # Maximum of 1 agent at a time
-  desired_capacity  = 0  # Let Jenkins scale agents as needed
+  name             = "jenkins-agent-asg"
+  min_size         = 0 # No agents running when idle
+  max_size         = 1 # Maximum of 1 agent at a time
+  desired_capacity = 0 # Let Jenkins scale agents as needed
 
-  vpc_zone_identifier = ["subnet-03768799a4e986f20"]  # Replace with your actual subnet ID
+  vpc_zone_identifier = ["subnet-03768799a4e986f20"] # Replace with your actual subnet ID
 
   launch_template {
     id      = aws_launch_template.jenkins_agent_template.id
@@ -54,7 +54,7 @@ resource "aws_autoscaling_group" "jenkins_agent_asg" {
   }
 
   health_check_type         = "EC2"
-  health_check_grace_period = 300  # Wait 5 minutes before considering an instance unhealthy
+  health_check_grace_period = 300 # Wait 5 minutes before considering an instance unhealthy
 
   tag {
     key                 = "Name"

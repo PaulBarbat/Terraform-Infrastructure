@@ -32,8 +32,33 @@ variable "key_name" {
 
 #An Elastic IP allocation ID to assign a static IP to Jenkins Master
 variable "elastic_ip_allocation_id" {
-  description = "The Elastic IP address for the Jenkins Master instance"
+  description = "The Elastic IP allocation ID to attach to the Jenkins Master (leave empty to skip)"
   type        = string
+  default     = ""
+}
+
+variable "region" {
+  description = "AWS region"
+  type        = string
+  default     = "eu-central-1" # preserve current behavior
+}
+
+variable "allowed_ssh_cidrs" {
+  description = "List of CIDRs allowed to SSH to Jenkins. Override in terraform.tfvars for production."
+  type        = list(string)
+  default     = ["0.0.0.0/0"]
+}
+
+variable "master_ami" {
+  description = "AMI for Jenkins master (default = current AMI)"
+  type        = string
+  default     = "ami-0ae607bdbb9253cad"
+}
+
+variable "agent_ami" {
+  description = "AMI for Jenkins agents (default = current AMI)"
+  type        = string
+  default     = "ami-01f9b4e7cd3e0bbed"
 }
 
 #TODO Variable validation
